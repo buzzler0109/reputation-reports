@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Niko Technologies — Reputation Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root {
+    --background: #fef2f2;
+    --accent: #dc2626;
+    --card-bg: #ffffff;
+    --badge-red: #fee2e2;
+    --badge-yellow: #fef3c7;
+    --badge-green: #d1fae5;
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    --divider: #f3f4f6;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+.page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+}
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+.header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+}
+.header-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.report-date {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.risk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+.risk-badge.red {
+    background-color: var(--badge-red);
+    color: #b91c1c;
+}
+.risk-badge.yellow {
+    background-color: var(--badge-yellow);
+    color: #b45309;
+}
+.risk-badge.green {
+    background-color: var(--badge-green);
+    color: #047857;
+}
+.overview {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 12px 30px rgba(220, 38, 38, 0.08);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+.metric {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.metric-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+}
+.metric-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--accent);
+}
+.metric-sub {
+    font-size: 16px;
+    color: var(--text-secondary);
+}
+.entity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+.entity-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 12px 30px rgba(220, 38, 38, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+.entity-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.entity-title span {
+    font-size: 22px;
+}
+.summary {
+    color: var(--text-secondary);
+    margin: 0;
+}
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+.table-wrapper {
+    overflow-x: auto;
+}
+.mentions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.mentions-table thead {
+    background-color: var(--badge-red);
+}
+.mentions-table th, .mentions-table td {
+    padding: 12px;
+    text-align: left;
+    vertical-align: top;
+}
+.mentions-table th {
+    font-weight: 600;
+    color: #991b1b;
+}
+.mentions-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+.mentions-table a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+.mentions-table a:hover {
+    text-decoration: underline;
+}
+.risk-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.risk-list li {
+    background-color: #f9fafb;
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.risk-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.category-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background-color: var(--badge-red);
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.recommendation {
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 0;
+    padding-top: 4px;
+    border-top: 1px solid var(--divider);
+}
+.card-footer {
+    margin-top: auto;
+}
+.card-footer-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+.footer {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .header-meta {
+        justify-content: flex-start;
+    }
+}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="header">
+    <div>
+        <h1>Niko Technologies — Reputation Report</h1>
+    </div>
+    <div class="header-meta">
+        <span class="risk-badge red">High Risk</span>
+        <span class="report-date">27 Feb 2026</span>
+    </div>
+</header>
+
+<section class="overview">
+    <div class="metric">
+        <span class="metric-label">Overall Risk Score</span>
+        <span class="metric-value">68<span class="metric-sub"> /100</span></span>
+    </div>
+    <div class="metric">
+        <span class="metric-label">Risk Level</span>
+        <span class="metric-value">High</span>
+    </div>
+    <div class="metric">
+        <span class="metric-label">Entities Scanned</span>
+        <span class="metric-value">4</span>
+    </div>
+</section>
+
+<section class="entity-grid">
+    <article class="entity-card">
+        <div class="card-header">
+            <div class="entity-title"><span>👤</span>Yurii Lamdan</div>
+            <span class="risk-badge yellow">Moderate Risk · 40</span>
+        </div>
+        <p class="summary">Yurii Lamdan is a board member and 100% shareholder of Niko Technologies OÜ, a financial services company involved in virtual currency and money transfer services. Although the company promotes compliance and transparency, there are public complaints and forum discussions suggesting possible involvement in high-risk gambling payments which raises some regulatory and reputational concerns. No direct negative employee reviews or complaints about Lamdan personally were found, but the association with compliance risks in the fintech sector warrants caution.</p>
+        <div>
+            <p class="section-title">Mentions</p>
+            <div class="table-wrapper">
+                <table class="mentions-table">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Sentiment</th>
+                            <th>Key Finding</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="https://en.lovejob.lt/company/108718/lootex/reviews">LoveJob</a></td>
+                            <td>⚠️ Neutral</td>
+                            <td>No reviews or complaints about Lootex, JSC where Yurii Lamdan is manager, and no active job postings or negative feedback were reported.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://ssb.ee/en/14511282-NIKO-TECHNOLOGIES-OU/media-storytelling">SSB.ee</a></td>
+                            <td>⚠️ Neutral</td>
+                            <td>Profiles and business details list Yurii Lamdan as a board member of Niko Technologies OÜ with no user tracking or published business news.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://fintelegram.com/niko-technologies-illegal-gambling-payments-another-technical-provider-in-the-firing-line/">FinTelegram</a></td>
+                            <td>❌ Negative</td>
+                            <td>Public complaints and forum discussions link Niko Technologies OÜ and Yurii Lamdan to high-risk gambling payments and highlight a contrast between marketing compliance claims and victim reports.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://elegro-public.s3.eu-central-1.amazonaws.com/policies/2025/Niko+Technologies+O%C3%9C+AML%26CTF+Policy.pdf">Elegro Public AWS</a></td>
+                            <td>✅ Positive</td>
+                            <td>Yurii Lamdan is the appointed AML Compliance Officer of Niko Technologies, demonstrating a commitment to regulatory compliance and ongoing training.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://mfjc.org/grantees/fellowship/">MFJC Fellowship Grants</a></td>
+                            <td>⚠️ Neutral</td>
+                            <td>No relevant information about Yurii Lamdan; unrelated content on academic fellowships.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <p class="section-title">Risks</p>
+            <ul class="risk-list">
+                <li>
+                    <div class="risk-meta">🟡 Medium <span class="category-tag">Regulatory</span></div>
+                    <div>Association with a financial services company involved in public complaints about illegal gambling payments and potential compliance risks in high-risk sectors.</div>
+                </li>
+                <li>
+                    <div class="risk-meta">🟡 Medium <span class="category-tag">PR</span></div>
+                    <div>Negative public perception due to victim reports and discussions contrasting the company's advertised compliance with actual business practices.</div>
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <p class="card-footer-title">Recommendation</p>
+            <p class="recommendation">Monitor regulatory and public sentiment developments closely and maintain transparency and strong compliance practices to mitigate reputational risks.</p>
+        </div>
+    </article>
+
+    <article class="entity-card">
+        <div class="card-header">
+            <div class="entity-title"><span>🏢</span>Niko Tech</div>
+            <span class="risk-badge red">High Risk · 75</span>
+        </div>
+        <p class="summary">Niko Tech faces significant reputational risks primarily due to repeated negative allegations regarding illegal payment processing for unlicensed gambling sites, regulatory warnings, and customer complaints about fraud and unresponsiveness. While there are positive technical service reviews, the prevalence and severity of accusations related to transaction laundering, masked payments, and regulatory breaches present serious legal and PR risks. Additionally, historical arbitration issues involving large compensation claims add a financial risk dimension.</p>
+        <div>
+            <p class="section-title">Mentions</p>
+            <div class="table-wrapper">
+                <table class="mentions-table">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Sentiment</th>
+                            <th>Key Finding</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="https://fintelegram.com/niko-technologies-illegal-gambling-payments-another-technical-provider-in-the-firing-line/">FinTelegram</a></td>
+                            <td>❌ Negative</td>
+                            <td>Multiple complaints and UK FCA warning accuse Niko Technologies of processing payments for illegal casinos using masked MCCs and enabling unlicensed remote gambling, with transaction laundering allegations and regulatory concerns.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://www.trustpilot.com/review/niko-tech.eu">Trustpilot (niko-tech.eu)</a></td>
+                            <td>✅ Positive</td>
+                            <td>Numerous 5-star reviews praising Niko Tech's technical expertise, timely communication, efficient payment migration, and professional support for crypto and backend systems.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://www.trustpilot.com/review/niko-technologies.eu">Trustpilot (niko-technologies.eu)</a></td>
+                            <td>❌ Negative</td>
+                            <td>Customer reports of fraudulent transactions linked to unlicensed gambling sites, failure to respond to refund requests, and complaints escalating to financial ombudsman and regulatory bodies alleging scams and illegitimate processing.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://www.thedailystar.net/news/bangladesh/accidents-fires/news/tengratila-blowouts-niko-ordered-pay-42m-against-claim-1b-4094606">The Daily Star</a></td>
+                            <td>⚠️ Neutral</td>
+                            <td>ICSID arbitration involving Niko's claims and Bangladesh's counterclaims over gas field compensation, with a ruling in favor of Bangladesh awarding a substantial compensation amount, indicating financial/legal conflict.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <p class="section-title">Risks</p>
+            <ul class="risk-list">
+                <li>
+                    <div class="risk-meta">🔴 High <span class="category-tag">Legal</span></div>
+                    <div>Allegations of illegal payment processing, transaction laundering, masked merchant codes, and FCA warnings exposing Niko Tech to regulatory sanctions and legal action.</div>
+                </li>
+                <li>
+                    <div class="risk-meta">🔴 High <span class="category-tag">PR</span></div>
+                    <div>Multiple public complaints and negative online reviews concerning fraud, unlicensed gambling facilitation, and poor customer service harming the company’s reputation.</div>
+                </li>
+                <li>
+                    <div class="risk-meta">🟡 Medium <span class="category-tag">Financial</span></div>
+                    <div>Ongoing arbitration and significant compensation claims related to historical disputes, posing financial exposure risks.</div>
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <p class="card-footer-title">Recommendation</p>
+            <p class="recommendation">Niko Tech should urgently address regulatory compliance issues, improve transparency and customer service responsiveness, and proactively manage public relations to mitigate reputational damage and legal risks.</p>
+        </div>
+    </article>
+
+    <article class="entity-card">
+        <div class="card-header">
+            <div class="entity-title"><span>🏢</span>Niko Technologies</div>
+            <span class="risk-badge red">High Risk · 75</span>
+        </div>
+        <p class="summary">Niko Technologies is implicated in facilitating payments for unlicensed online casinos, including those operating illegally in the UK and targeting self-excluded players. Despite some positive customer reviews about their crypto payment services, regulatory warnings from the FCA about unauthorized operations present significant legal and reputational risks.</p>
+        <div>
+            <p class="section-title">Mentions</p>
+            <div class="table-wrapper">
+                <table class="mentions-table">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Sentiment</th>
+                            <th>Key Finding</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="https://www.trustpilot.com/review/niko-technologies.eu">Trustpilot</a></td>
+                            <td>❌ Negative</td>
+                            <td>This company processes payments on behalf of casinos operating illegally in the UK, who aren’t part of Gamstop, raising concerns about the legality of their operations.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://fintelegram.com/niko-technologies-illegal-gambling-payments-another-technical-provider-in-the-firing-line/">FinTelegram</a></td>
+                            <td>❌ Negative</td>
+                            <td>Niko Technologies is reported to be facilitating payments for unlicensed online casinos and is part of investigations into high-risk crypto payment processors involved with illegal gambling.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://ca.trustpilot.com/review/niko-tech.eu">Trustpilot</a></td>
+                            <td>✅ Positive</td>
+                            <td>Positive review indicating smooth, reliable crypto payment integration and good service for e-commerce platforms using Niko Tech.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://www.fca.org.uk/news/warnings/elegro-niko-technologies-wwwelegroeu">FCA</a></td>
+                            <td>❌ Negative</td>
+                            <td>The FCA warns that Elegro/Niko Technologies operates as an unauthorized firm, with consumers lacking protection and recourse if issues arise due to lack of proper FCA authorization.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <p class="section-title">Risks</p>
+            <ul class="risk-list">
+                <li>
+                    <div class="risk-meta">🔴 High <span class="category-tag">Legal</span></div>
+                    <div>Operating as an unauthorized payment service provider in the UK, facilitating payments for illegal and unlicensed online gambling operations.</div>
+                </li>
+                <li>
+                    <div class="risk-meta">🔴 High <span class="category-tag">PR</span></div>
+                    <div>Negative public perception due to links with illegal online casinos and regulatory warnings, damaging reputation and trust with customers.</div>
+                </li>
+                <li>
+                    <div class="risk-meta">🟡 Medium <span class="category-tag">Financial</span></div>
+                    <div>Potential financial penalties or sanctions from regulatory authorities and the risk of losing customers due to the legal status of services.</div>
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <p class="card-footer-title">Recommendation</p>
+            <p class="recommendation">Niko Technologies should urgently address its regulatory compliance issues, seek proper authorization, and enhance transparency to mitigate legal and reputational damage.</p>
+        </div>
+    </article>
+
+    <article class="entity-card">
+        <div class="card-header">
+            <div class="entity-title"><span>🌐</span>Elegro.eu</div>
+            <span class="risk-badge red">High Risk · 80</span>
+        </div>
+        <p class="summary">Elegro.eu is a payment processing product associated with significant reputational risks, including allegations of processing payments for illegal and unlicensed gambling sites, transaction laundering, and operating without regulatory authorization in the UK. Multiple negative reviews and regulatory warnings highlight serious concerns about financial misconduct and lack of consumer protection.</p>
+        <div>
+            <p class="section-title">Mentions</p>
+            <div class="table-wrapper">
+                <table class="mentions-table">
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th>Sentiment</th>
+                            <th>Key Finding</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="https://www.scamadviser.com/check-website-old/elegro.eu">Scamadviser</a></td>
+                            <td>⚠️ Neutral</td>
+                            <td>The website is generally safe to shop and has valid SSL certificates but has received mainly negative consumer reviews with an average score of 2.3 stars.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://www.trustpilot.com/review/elegro.eu">Trustpilot</a></td>
+                            <td>❌ Negative</td>
+                            <td>Multiple 1-star reviews accuse Elegro.eu of acting as an illegal payment processor for unlicensed casinos and engaging in fraudulent activities including unauthorized transactions and money laundering.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://fintelegram.com/niko-technologies-illegal-gambling-payments-another-technical-provider-in-the-firing-line/">FinTelegram</a></td>
+                            <td>❌ Negative</td>
+                            <td>Detailed reports allege that Elegro.eu (Niko Technologies) facilitates payments for unlicensed online casinos through transaction masking and misleading merchant descriptors, with evidence from victims and forum discussions.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://www.fca.org.uk/news/warnings/elegro-niko-technologies-wwwelegroeu">FCA (UK Financial Conduct Authority)</a></td>
+                            <td>❌ Negative</td>
+                            <td>The FCA has issued a warning about Elegro.eu operating as an unauthorized firm in the UK, advising consumers to avoid dealings with the firm due to the lack of regulatory protection and potential financial risk.</td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://cryptwerk.com/company/elegro-eu/">Cryptwerk</a></td>
+                            <td>⚠️ Neutral</td>
+                            <td>Elegro.eu is described as a blockchain-based FinTech payment platform headquartered in Tallinn, offering various crypto and fiat payment solutions with AML/KYC features.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <p class="section-title">Risks</p>
+            <ul class="risk-list">
+                <li>
+                    <div class="risk-meta">🔴 High <span class="category-tag">Legal</span></div>
+                    <div>Operating without regulatory authorization in the UK and facilitating payments for unlicensed gambling operations exposes Elegro.eu to legal sanctions and regulatory actions.</div>
+                </li>
+                <li>
+                    <div class="risk-meta">🔴 High <span class="category-tag">Financial</span></div>
+                    <div>Accusations of transaction laundering, unauthorized transactions, and involvement in illegal gambling payments represent severe financial risks including fraud and loss of customer funds.</div>
+                </li>
+                <li>
+                    <div class="risk-meta">🔴 High <span class="category-tag">PR</span></div>
+                    <div>Highly negative reviews and public accusations on multiple platforms severely damage the product's reputation and trustworthiness among consumers.</div>
+                </li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <p class="card-footer-title">Recommendation</p>
+            <p class="recommendation">Elegro.eu should urgently address regulatory compliance issues, improve transparency, and cease associations with unlicensed gambling operations to mitigate legal and reputational risks.</p>
+        </div>
+    </article>
+</section>
+
+<footer class="footer">
+    Generated by AI Reputation Shield — Niko Technologies — 27 Feb 2026
+</footer>
+</div>
+</body>
+</html>
