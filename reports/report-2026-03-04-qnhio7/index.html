@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niko Technologies — Reputation Report</title>
+<style>
+    :root {
+        --background: #fef2f2;
+        --accent: #dc2626;
+        --card-bg: #ffffff;
+        --badge-bg: #fee2e2;
+        --badge-color: #dc2626;
+        --text-primary: #1f2933;
+        --text-secondary: #4b5563;
+        --shadow: 0 12px 24px rgba(220, 38, 38, 0.08);
+    }
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--background);
+        color: var(--text-primary);
+        line-height: 1.6;
+        padding: 24px;
+    }
+    header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 32px;
+    }
+    header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        color: var(--accent);
+    }
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-weight: 600;
+        background: var(--badge-bg);
+        color: var(--badge-color);
+        font-size: 0.95rem;
+        white-space: nowrap;
+    }
+    .report-date {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+    }
+    .overview {
+        background: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 24px;
+        margin-bottom: 32px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 24px;
+    }
+    .overview-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .overview-label {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .overview-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+    .entity-card {
+        background: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        padding: 24px;
+        margin-bottom: 28px;
+    }
+    .entity-header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+    .entity-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    .entity-title span.icon {
+        font-size: 1.6rem;
+    }
+    .entity-summary {
+        margin-bottom: 20px;
+        color: var(--text-secondary);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+    }
+    th, td {
+        text-align: left;
+        padding: 12px 16px;
+        vertical-align: top;
+    }
+    th {
+        background: #fde8e8;
+        color: var(--accent);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+    }
+    tr:nth-child(even) td {
+        background: #fff7f7;
+    }
+    a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+    a:hover, a:focus {
+        text-decoration: underline;
+    }
+    .risks {
+        margin-bottom: 16px;
+    }
+    .risk-item {
+        margin-bottom: 12px;
+        color: var(--text-secondary);
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    .risk-item span.indicator {
+        font-weight: 700;
+        min-width: 110px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-primary);
+    }
+    .recommendation {
+        font-style: italic;
+        color: var(--text-primary);
+        margin-top: 12px;
+    }
+    footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+    }
+    @media (max-width: 720px) {
+        body {
+            padding: 16px;
+        }
+        header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .entity-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        table, th, td {
+            font-size: 0.9rem;
+        }
+    }
+    @media print {
+        body {
+            background: #ffffff;
+        }
+        .overview, .entity-card {
+            box-shadow: none;
+            border: 1px solid #f3dcdc;
+        }
+        a {
+            color: #000000;
+        }
+    }
+</style>
+</head>
+<body>
+<header>
+    <h1>Niko Technologies — Reputation Report</h1>
+    <div class="badge">Overall Risk: High</div>
+    <div class="report-date">Report Date: March 4, 2026</div>
+</header>
+
+<section class="overview">
+    <div class="overview-item">
+        <div class="overview-label">Overall Risk Score</div>
+        <div class="overview-value">75 / 100</div>
+    </div>
+    <div class="overview-item">
+        <div class="overview-label">Risk Level</div>
+        <div class="overview-value">High Risk</div>
+    </div>
+    <div class="overview-item">
+        <div class="overview-label">Total Entities Scanned</div>
+        <div class="overview-value">3</div>
+    </div>
+</section>
+
+<section class="entity-card">
+    <div class="entity-header">
+        <div class="entity-title">
+            <span class="icon">🏢</span>
+            Niko Tech
+        </div>
+        <div class="badge">High Risk — Score 75</div>
+    </div>
+    <p class="entity-summary">Niko Tech faces significant reputational risks primarily due to legal disputes and arbitration related to explosions and damage at gas fields in Bangladesh, resulting in large compensation claims and asset seizures. While other mentions are neutral or unrelated to major controversies, the ongoing legal and financial issues pose high risks to its reputation.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Sentiment</th>
+                <th>Key Finding</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="https://www.thedailystar.net/news/bangladesh/accidents-fires/news/tengratila-blowouts-niko-ordered-pay-42m-against-claim-1b-4094606">The Daily Star</a></td>
+                <td>❌ Negative</td>
+                <td>Niko ordered to pay $42 million against a $1 billion claim linked to explosions and gas flaring damage; contracts annulled and assets seized following legal rulings.</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.gappsgroup.com/inside-gapps/from-marketing-to-cloud-how-niko-shaped-his-own-path-at-gapps">Gapps Group</a></td>
+                <td>⚠️ Neutral</td>
+                <td>Niko's professional growth story in cloud computing, with no associated controversies.</td>
+            </tr>
+            <tr>
+                <td><a href="https://wp.technologyreview.com/">MIT Technology Review</a></td>
+                <td>⚠️ Neutral</td>
+                <td>General tech news mentioning AI and online deception without direct links to Niko Tech.</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.youtube.com/watch?v=iwJKqU-X-X0">Arizona’s Family (3TV / CBS 5) YouTube</a></td>
+                <td>⚠️ Neutral</td>
+                <td>Coverage of Nikola Motors bankruptcy with no connection to Niko Tech.</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.failory.com/blog/morning-brew-review">Failory</a></td>
+                <td>⚠️ Neutral</td>
+                <td>Entrepreneurial advice content not directly related to Niko Tech.</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="risks">
+        <div class="risk-item">
+            <span class="indicator">🔴 High · Legal</span>
+            <span>Niko Tech is involved in serious international arbitration and legal cases over explosions and damages in Bangladesh, with significant compensation demands and annulment of contracts.</span>
+        </div>
+        <div class="risk-item">
+            <span class="indicator">🔴 High · Financial</span>
+            <span>The company faces large financial liabilities from compensation claims and asset seizures, impacting its financial stability.</span>
+        </div>
+        <div class="risk-item">
+            <span class="indicator">🟡 Medium · PR</span>
+            <span>The negative publicity from the accidents and ongoing legal battles could damage public and stakeholder perception of Niko Tech.</span>
+        </div>
+    </div>
+    <p class="recommendation">Niko Tech should prioritize resolving the ongoing legal disputes with transparency and strengthen its risk management and communication strategies to restore public trust and mitigate further reputational damage.</p>
+</section>
+
+<section class="entity-card">
+    <div class="entity-header">
+        <div class="entity-title">
+            <span class="icon">🏢</span>
+            Niko Technologies
+        </div>
+        <div class="badge">High Risk — Score 75</div>
+    </div>
+    <p class="entity-summary">Niko Technologies faces significant reputational risks due to legal and ethical issues, including a $9.5 million bribery fine related to its Bangladeshi subsidiary and responsibility for environmental damage causing costly arbitration losses. Despite some neutral to positive mentions related to their software products, the company has substantial legal and PR risks stemming from past corruption and negligence in operations.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Sentiment</th>
+                <th>Key Finding</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="https://www.thedailystar.net/news/bangladesh/accidents-fires/news/tengratila-blowouts-niko-ordered-pay-42m-against-claim-1b-4094606">The Daily Star</a></td>
+                <td>❌ Negative</td>
+                <td>ICSID ruled Niko guilty of negligence in operating the Feni gas field, ordering a $42 million payment for environmental damage.</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.cbc.ca/news/canada/calgary/calgary-s-niko-resources-to-pay-9-5m-bribery-fine-1.987297">CBC News</a></td>
+                <td>❌ Negative</td>
+                <td>Niko Resources admitted to bribing a Bangladeshi minister, incurring nearly $9.5 million in fines under anti-corruption laws.</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.cryptolegal.uk/list-of-unlawfully-operating-companies/">Crypto Legal</a></td>
+                <td>⚠️ Neutral</td>
+                <td>Listed among unlawfully operating companies, indicating potential regulatory scrutiny.</td>
+            </tr>
+            <tr>
+                <td><a href="https://nikohealth.com/">NikoHealth website</a></td>
+                <td>✅ Positive</td>
+                <td>Positive feedback on NikoHealth software showcasing efficiency gains unrelated to oil and gas operations.</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="risks">
+        <div class="risk-item">
+            <span class="indicator">🔴 High · Legal</span>
+            <span>Significant legal liabilities from environmental negligence arbitration and a criminal bribery fine under foreign anti-corruption laws.</span>
+        </div>
+        <div class="risk-item">
+            <span class="indicator">🔴 High · Financial</span>
+            <span>Large financial penalties, including a $42 million award and $9.5 million fine, strain finances and shareholder value.</span>
+        </div>
+        <div class="risk-item">
+            <span class="indicator">🔴 High · PR</span>
+            <span>Bribery scandal and environmental negligence erode brand reputation and stakeholder trust.</span>
+        </div>
+    </div>
+    <p class="recommendation">Niko Technologies should prioritize transparent legal and compliance reforms, engage in proactive reputation management, and strengthen internal controls to mitigate ongoing risks and rebuild trust with stakeholders.</p>
+</section>
+
+<section class="entity-card">
+    <div class="entity-header">
+        <div class="entity-title">
+            <span class="icon">🌐</span>
+            Elegro.eu
+        </div>
+        <div class="badge">High Risk — Score 75</div>
+    </div>
+    <p class="entity-summary">Elegro.eu shows significant reputational risks primarily due to negative user reviews concerning poor product quality, delivery issues, and unresponsive customer service. Legal scrutiny and fines related to self-preferencing and competition law in Poland further elevate the risk profile. There is a strong presence of public and regulatory concerns indicating high PR, legal, and product risks.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Sentiment</th>
+                <th>Key Finding</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="https://www.reviews.io/company-reviews/store/allegro">Reviews.io</a></td>
+                <td>❌ Negative</td>
+                <td>Repeated complaints about poor product quality, delivery delays, and unresponsive customer service with allegations of discrimination.</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.reddit.com/r/poland/comments/w2z6r3/is_allegro_a_safe_site/">Reddit r/poland</a></td>
+                <td>⚠️ Neutral</td>
+                <td>Mixed user opinions reflecting uncertainty about platform reliability and safety.</td>
+            </tr>
+            <tr>
+                <td><a href="https://globalcompetitionreview.com/article/poland-hits-allegro-eu44-million-self-preferencing-fine">Global Competition Review</a></td>
+                <td>❌ Negative</td>
+                <td>€44 million fine for self-preferencing highlights serious competition law breaches.</td>
+            </tr>
+            <tr>
+                <td><a href="https://uokik.gov.pl/en">Office of Competition and Consumer Protection (UOKiK)</a></td>
+                <td>❌ Negative</td>
+                <td>Ongoing investigation into favoring proprietary delivery methods indicates sustained regulatory risk.</td>
+            </tr>
+            <tr>
+                <td><a href="https://www.reddit.com/r/Prague/comments/17ld42e/is_allegrocz_a_reliable_website/">Reddit r/Prague</a></td>
+                <td>⚠️ Neutral</td>
+                <td>Community queries about marketplace reliability without strong positive endorsements.</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="risks">
+        <div class="risk-item">
+            <span class="indicator">🔴 High · Legal</span>
+            <span>Facing a €44 million fine for self-preferencing and enduring investigations for competition law violations in Poland.</span>
+        </div>
+        <div class="risk-item">
+            <span class="indicator">🔴 High · PR</span>
+            <span>Numerous user complaints around quality, delivery, and customer service intensify reputational damage.</span>
+        </div>
+        <div class="risk-item">
+            <span class="indicator">🟡 Medium · Product</span>
+            <span>Customer feedback points to inconsistent quality and potential counterfeit goods.</span>
+        </div>
+    </div>
+    <p class="recommendation">Elegro.eu should prioritize addressing regulatory compliance concerns immediately and improve customer service and product quality to rebuild trust and reduce reputational damage.</p>
+</section>
+
+<footer>
+    Generated by AI Reputation Shield — Niko Technologies — March 4, 2026
+</footer>
+</body>
+</html>
