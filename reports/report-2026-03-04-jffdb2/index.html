@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Niko Technologies — Reputation Report</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+    --bg-color: #f0fdf4;
+    --accent-color: #059669;
+    --badge-bg: #d1fae5;
+    --badge-text: #065f46;
+    --card-bg: #ffffff;
+    --card-shadow: 0 10px 20px rgba(5, 150, 105, 0.08);
+    --text-color: #064e3b;
+    --muted-text: #065f46;
+    --border-color: #bbf7d0;
+    --table-header: #ecfdf5;
+    --table-row-alt: #f9fdfb;
+    --font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    font-family: var(--font-stack);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 0 16px 48px;
+}
+header {
+    max-width: 1100px;
+    margin: 32px auto 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+header h1 {
+    margin: 0;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #022c22;
+}
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background-color: var(--badge-bg);
+    color: var(--badge-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.report-date {
+    font-size: 0.95rem;
+    color: var(--muted-text);
+}
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 24px;
+}
+section {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    padding: 24px;
+    border: 1px solid var(--border-color);
+}
+.section-title {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.3rem;
+    color: #065f46;
+    font-weight: 700;
+}
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+.metric-card {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 18px;
+    background-color: #fbfefc;
+}
+.metric-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.metric-value {
+    margin-top: 8px;
+    font-weight: 700;
+    color: #022c22;
+}
+.metric-value.large {
+    font-size: 2.4rem;
+}
+.metric-value.medium {
+    font-size: 1.6rem;
+}
+.entity-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.entity-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #022c22;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.entity-badge {
+    background-color: var(--badge-bg);
+    color: var(--badge-text);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.summary {
+    margin: 0 0 20px;
+    color: var(--text-color);
+}
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+thead tr {
+    background-color: var(--table-header);
+}
+th, td {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.95rem;
+}
+tbody tr:nth-child(even) {
+    background-color: var(--table-row-alt);
+}
+tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+th {
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted-text);
+    border-bottom: 1px solid var(--border-color);
+}
+td {
+    color: #052e16;
+    border-bottom: 1px solid var(--border-color);
+}
+td a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+td a:hover {
+    text-decoration: underline;
+}
+.sentiment {
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.risks-list {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: grid;
+    gap: 8px;
+}
+.risks-list li {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #fafffb;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.recommendation {
+    margin-top: 20px;
+    font-style: italic;
+    color: #065f46;
+    background-color: #ecfdf5;
+    border-left: 4px solid var(--accent-color);
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+footer {
+    max-width: 1100px;
+    margin: 32px auto;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--muted-text);
+}
+@media (max-width: 768px) {
+    body {
+        padding: 0 12px 32px;
+    }
+    header {
+        margin: 24px auto 16px;
+    }
+    section {
+        padding: 20px;
+    }
+    table {
+        min-width: 100%;
+    }
+}
+</style>
+</head>
+<body>
+<header>
+    <h1>Niko Technologies — Reputation Report</h1>
+    <div class="badge">Overall Risk: Low</div>
+    <div class="report-date">Report Date: March 4, 2026</div>
+</header>
+<main>
+    <section aria-labelledby="overview">
+        <h2 class="section-title" id="overview">Overview</h2>
+        <div class="overview-grid">
+            <div class="metric-card">
+                <div class="metric-label">Overall Risk Score</div>
+                <div class="metric-value large">20 / 100</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Risk Level</div>
+                <div class="metric-value medium">Low</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Entities Scanned</div>
+                <div class="metric-value medium">1</div>
+            </div>
+        </div>
+    </section>
+    <section aria-labelledby="entity-workeron">
+        <div class="entity-header">
+            <h2 class="entity-title" id="entity-workeron">🌐 workeron.ai</h2>
+            <span class="entity-badge">Low Risk — 20 / 100</span>
+        </div>
+        <p class="summary">workeron.ai enjoys a strong positive reputation with high customer satisfaction regarding its organization, support, and AI expertise. There are general concerns in the AI industry about misinformation risks associated with AI tools, but no specific negative mentions or complaints about workeron.ai itself were found. Overall, the product is viewed positively with minimal reputational risk.</p>
+        <h3 class="section-title" style="margin-top:0;">Mentions &amp; Sentiment</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Source</th>
+                        <th scope="col">Sentiment</th>
+                        <th scope="col">Key Finding</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="https://www.trustpilot.com/review/workrr.ai">Trustpilot</a></td>
+                        <td><span class="sentiment">✅ Positive</span></td>
+                        <td>Customers praise workeron.ai for exceptional organization, support, expertise in AI, and dedication to customer success.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.hcamag.com/ca/specialization/transformation/workers-ai-errors-proving-costly-to-employers-report/564717">HCAMag</a></td>
+                        <td><span class="sentiment">⚠️ Neutral</span></td>
+                        <td>Article highlights general risks of AI-generated errors and misinformation; workeron.ai not specifically referenced.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.reddit.com/r/AmazonVine/comments/1odawmr/i_reached_out_to_cs_about_if_we_should_report/">Reddit AmazonVine</a></td>
+                        <td><span class="sentiment">⚠️ Neutral</span></td>
+                        <td>Discussion focuses on fake AI reviews broadly without implicating workeron.ai.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.reddit.com/r/WFHJobs/comments/1n8h7mb/tried_multiple_ai_training_platforms_heres_what/">Reddit WFHJobs</a></td>
+                        <td><span class="sentiment">⚠️ Neutral</span></td>
+                        <td>User shares mixed experiences with various AI platforms; workeron.ai not negatively highlighted.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="https://www.hrmorning.com/news/ai-job-postings-virginia-doj-fine/">HRMorning</a></td>
+                        <td><span class="sentiment">⚠️ Neutral</span></td>
+                        <td>Content addresses AI compliance issues in general; no mention of workeron.ai.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 class="section-title">Risks</h3>
+        <ul class="risks-list">
+            <li>🟢 Industry Monitoring — No specific product risks identified; continue vigilance around AI misinformation narratives.</li>
+        </ul>
+        <div class="recommendation"><strong>Recommendation:</strong> Continue maintaining high standards for customer service and AI accuracy. Monitor industry-wide AI misinformation concerns to mitigate potential reputational risks proactively.</div>
+    </section>
+</main>
+<footer>
+    Generated by AI Reputation Shield — Niko Technologies — March 4, 2026
+</footer>
+</body>
+</html>
